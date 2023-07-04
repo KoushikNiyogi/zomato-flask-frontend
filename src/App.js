@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Login from './components/Login';
+import Navbar from './components/Navbar';
+import AddOrder from './components/AddOrder';
+import Orders from './components/Orders';
+import Menu from './components/Menu';
 
-function App() {
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Navbar />
+      
+        <ToastContainer  position="top-center"
+          autoClose={3000}
+          hideProgressBar
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover/> {/* Add the ToastContainer component */}
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/menu" element={<Menu />} />
+          <Route path="/add_order/:id" element={<AddOrder />} />
+          <Route path="/orders" element={<Orders />} />
+        </Routes>
+      
     </div>
   );
-}
+};
 
 export default App;
