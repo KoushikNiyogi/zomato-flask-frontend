@@ -16,6 +16,7 @@ import { toast } from 'react-toastify';
 const AddOrder = () => {
   const [menu, setMenu] = useState([]);
   const [name,setName] = useState("");
+  const [user,setuser] = useState(JSON.parse(localStorage.getItem("user"))||{});
   const { id } = useParams();
   const dish = menu.find((dish) => dish.id === id);
   
@@ -23,9 +24,11 @@ const AddOrder = () => {
     event.preventDefault();
     let obj={
         id,
-        name,
+        name : user.name,
         dishes : dish.name,
-        price : dish.price
+        dishid : dish.id,
+        price : dish.price,
+        userid : user.id
     }
     axios.post(`https://zomato-backend-api.onrender.com/take_order`,obj)
         .then(res=>{
@@ -43,6 +46,7 @@ const fetchMenu =  () => {
         .then(res=>setMenu(res.data.menu))
         .catch(err=>console.log(err))
 };
+console.log(user.name);
   return (
     <Box>
     <Flex justify="center" width={"70%"} margin={"auto"}>
@@ -56,10 +60,8 @@ const fetchMenu =  () => {
             <FormLabel htmlFor="customerName">Customer Name</FormLabel>
             <Input
               id="customerName"
-              placeholder="Enter customer name"
-              value={name}
-              onChange={(e)=>setName(e.target.value)}
-              required
+              value={user.name}
+              isReadOnly
             />
           </FormControl>
           <Button type="submit" colorScheme="blue">

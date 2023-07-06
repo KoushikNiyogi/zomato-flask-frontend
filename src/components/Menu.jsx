@@ -8,6 +8,7 @@ import {
     FormLabel,Input,Textarea,Switch,Box, Table,Thead,Tbody,Th ,Tr,Td
 } from '@chakra-ui/react';
 import { useNavigate } from "react-router-dom";
+import ChatBotContainer from "./ChatCotainer";
 const initial = {
     name: "",
     price: 0,
@@ -26,7 +27,7 @@ export default function Menu() {
 
     const fetchMenu =  () => {
             axios.get('https://zomato-backend-api.onrender.com/menu')
-            .then(res=>setMenu(res.data.menu))
+            .then(res=>{console.log(res);setMenu(res.data.menu)})
             .catch(err=>console.log(err))
     };
 
@@ -95,6 +96,7 @@ export default function Menu() {
             <Th>ID</Th>
             <Th>Name</Th>
             <Th>Price</Th>
+            <Th>Rating</Th>
             <Th>Availability</Th>
             {role === 'admin' && <Th>Actions</Th>}
           </Tr>
@@ -105,6 +107,7 @@ export default function Menu() {
               <Td>{index + 1}</Td>
               <Td>{dish.name}</Td>
               <Td>{dish.price}</Td>
+              <Td>{dish.rating== undefined ? 0 : (dish.rating.reduce((sum,el)=>sum+el,0)/dish.rating.length).toFixed(0)}</Td>
               <Td>{dish.availability ? 'Available' : 'Not Available'}</Td>
               {role === 'admin' && (
                 <Td>
@@ -141,7 +144,7 @@ export default function Menu() {
           ))}
         </Tbody>
       </Table>
-
+      <ChatBotContainer/>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <ModalOverlay />
         <ModalContent>

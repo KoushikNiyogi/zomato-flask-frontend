@@ -20,6 +20,12 @@ function Navbar() {
             Orders
           </NavLink>
         </li>
+        <li>
+          <button onClick={()=>{
+            localStorage.removeItem("role");
+            localStorage.removeItem("user");
+          }}>Logout</button>
+        </li>
       </ul>
     </nav>
   );

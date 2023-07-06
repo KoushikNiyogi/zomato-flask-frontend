@@ -1,10 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './Login.css';
+import axios from 'axios';
 
 const Login = () => {
   const navigate = useNavigate();
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get('https://zomato-backend-api.onrender.com/users');
+        console.log(response)
+        setUsers(response.data.users);
+      } catch (error) {
+        console.error(error);
+        toast.error('Failed to fetch users');
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -19,8 +36,21 @@ const Login = () => {
     } else {
       // Store 'user' in local storage key
       localStorage.setItem('role', 'user');
-      navigate('/menu');
-      toast.success('User login successful');
+      const user = users.find((user) => user.email === email && user.password === password);
+
+  if (user) {
+    localStorage.setItem('role', "user");
+    localStorage.setItem("user",JSON.stringify(user));
+    navigate('/menu');
+    toast.success(`User login successful`);
+  } else {
+    const userWithEmail = users.find((user) => user.email === email);
+    if (userWithEmail) {
+      toast.error('Invalid password');
+    } else {
+      toast.error('Invalid email');
+    }
+  }
     }
   };
 

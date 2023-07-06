@@ -7,6 +7,8 @@ import Navbar from './components/Navbar';
 import AddOrder from './components/AddOrder';
 import Orders from './components/Orders';
 import Menu from './components/Menu';
+import OrderStatusUpdate from './components/example';
+import PrivateRoute from './components/PrivateRoute';
 
 
 const App = () => {
@@ -14,7 +16,7 @@ const App = () => {
     <div>
       <Navbar />
       
-        <ToastContainer  position="top-center"
+       <ToastContainer  position="top-center"
           autoClose={3000}
           hideProgressBar
           newestOnTop
@@ -22,13 +24,14 @@ const App = () => {
           rtl={false}
           pauseOnFocusLoss
           draggable
-          pauseOnHover/> {/* Add the ToastContainer component */}
+          pauseOnHover/>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/menu" element={<Menu />} />
-          <Route path="/add_order/:id" element={<AddOrder />} />
-          <Route path="/orders" element={<Orders />} />
+          <Route path="/menu" element={<PrivateRoute><Menu /></PrivateRoute>} />
+          <Route path="/add_order/:id" element={<PrivateRoute><AddOrder /></PrivateRoute>} />
+          <Route path="/orders" element={<PrivateRoute><Orders /></PrivateRoute>}/>
         </Routes>
+        
       
     </div>
   );
