@@ -30,7 +30,8 @@ const AddOrder = () => {
         price : dish.price,
         userid : user.id
     }
-    axios.post(`https://zomato-backend-api.onrender.com/take_order`,obj)
+    console.log(obj)
+    axios.post(`https://zomato-flask-mongodb.onrender.com/take_order`,obj)
         .then(res=>{
             toast.success(res.data.msg);
             fetchMenu()
@@ -42,7 +43,7 @@ const AddOrder = () => {
 }, []);
 
 const fetchMenu =  () => {
-        axios.get('https://zomato-backend-api.onrender.com/menu')
+        axios.get('https://zomato-flask-mongodb.onrender.com/menu')
         .then(res=>setMenu(res.data.menu))
         .catch(err=>console.log(err))
 };

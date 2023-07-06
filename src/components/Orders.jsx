@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
+import io from 'socket.io-client';
 import {
   Table,
   Thead,
@@ -22,6 +22,9 @@ const init = {
   review: "",
   rating: 1
 }
+
+
+
 const Orders = () => {
   const [id, setId] = useState();
   const [review, setReview] = useState(init)
@@ -29,31 +32,48 @@ const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [role, setrole] = useState(localStorage.getItem("role") || "");
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || {})
- /* const socket = io('https://zomato-backend-api.onrender.com');
-  socket.on('order_status_updated', (data) => {
-    console.log(data)
-    if (data.order_id === user.id) {
-      alert(`Order status updated: ${data.status}`);
-    }
-  });*/
+ 
 
   useEffect(() => {
     // Fetch orders from the backend
     fetchOrders();
-    return () => {
-      //socket.disconnect();
-    };
+    
   }, []);
+
+ useEffect(()=>{
+    const socket = io('https://zomato-flask-mongodb.onrender.com/');
+    socket.on('order_status_changed', function(data) {
+      var orderId = data.order_id;
+      var newStatus = data.status;
+      var id = data.userid;
+
+      // Update the order status in the table
+      axios.get("https://zomato-flask-mongodb.onrender.com/review_orders")
+      .then(res=>{
+         let user = JSON.parse(localStorage.getItem("user"))
+         fetchOrders();
+         if(user.id == id){
+          alert(`Status of order ${orderId} has changed to ${newStatus}`)
+         }
+      })
+
+      return () => {
+        socket.disconnect();
+      };
+     
+    })
+  },[])
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get('https://zomato-backend-api.onrender.com/review_orders');
-      const allOrders = response.data.orders;
+      const response = await axios.get('https://zomato-flask-mongodb.onrender.com/review_orders');
+      const allOrders = response.data.menu;
       console.log(allOrders);
       if (role === 'admin') {
         setOrders(allOrders);
       } else {
         const filteredOrders = allOrders.filter(order => order.userid === user.id);
+        console.log(filteredOrders)
         setOrders(filteredOrders);
       }
     } catch (error) {
@@ -71,9 +91,9 @@ const Orders = () => {
   };
 
   // Function to handle submitting a new dish
-  const handleSubmitReview = () => {
+  const handleSubmitReview = (id) => {
     console.log(id)
-    axios.patch(`https://zomato-backend-api.onrender.com/reviews/${id}`, review)
+    axios.patch(`https://zomato-flask-mongodb.onrender.com/add_review/${id}`, review)
       .then(res => {
         console.log(res);
         toast.success(res.data.msg);
@@ -98,7 +118,7 @@ const Orders = () => {
         id,
         status
       }
-      axios.patch(`https://zomato-backend-api.onrender.com/update_order`, obj)
+      axios.patch(`https://zomato-flask-mongodb.onrender.com/update_order`, obj)
         .then(res => {
           toast.success(res.data.msg);
           fetchOrders()
@@ -145,7 +165,7 @@ const Orders = () => {
                   <Button
                     colorScheme="blue"
                     size="sm"
-                    onClick={() => handleAddReview(order.dishid)}
+                    onClick={() => handleAddReview(order.id)}
                   >
                     Add Review
                   </Button>

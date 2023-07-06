@@ -11,9 +11,9 @@ const Login = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('https://zomato-backend-api.onrender.com/users');
+        const response = await axios.get('https://zomato-flask-mongodb.onrender.com/users');
         console.log(response)
-        setUsers(response.data.users);
+        setUsers(response.data.menu);
       } catch (error) {
         console.error(error);
         toast.error('Failed to fetch users');
@@ -53,7 +53,7 @@ const Login = () => {
   }
     }
   };
-
+  console.log(users);
   return (
     <div className="login-container">
       <div className="login-form">

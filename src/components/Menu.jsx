@@ -26,7 +26,7 @@ export default function Menu() {
     }, []);
 
     const fetchMenu =  () => {
-            axios.get('https://zomato-backend-api.onrender.com/menu')
+            axios.get('https://zomato-flask-mongodb.onrender.com/menu')
             .then(res=>{console.log(res);setMenu(res.data.menu)})
             .catch(err=>console.log(err))
     };
@@ -49,7 +49,7 @@ export default function Menu() {
     // Function to handle submitting a new dish
     const handleSubmitDish = () => {
         console.log(newDish)
-        axios.post(`https://zomato-backend-api.onrender.com/add_dish`,newDish)
+        axios.post(`https://zomato-flask-mongodb.onrender.com/add_dish`,newDish)
         .then(res=>{
             toast.success(res.data.msg);
             fetchMenu()
@@ -62,7 +62,7 @@ export default function Menu() {
             id : dish.id,
             availability : !dish.availability
         }
-        axios.post(`https://zomato-backend-api.onrender.com/update_availability`,obj)
+        axios.post(`https://zomato-flask-mongodb.onrender.com/update_availability`,obj)
         .then(res=>{
             console.log(res);
             toast.success(res.data.msg);
@@ -72,7 +72,7 @@ export default function Menu() {
     };
 
     const handleRemove = (id) => {
-        axios.delete(`https://zomato-backend-api.onrender.com/remove_dish/${id}`)
+        axios.delete(`https://zomato-flask-mongodb.onrender.com/remove_dish/${id}`)
         .then(res=>{
             toast.success(res.data.msg);
             fetchMenu()

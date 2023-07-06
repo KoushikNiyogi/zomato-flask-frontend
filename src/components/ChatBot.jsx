@@ -13,7 +13,7 @@ const ChatBot = () => {
 
 
     const getBotResponse = async () => {
-      const response = await fetch('https://zomato-backend-api.onrender.com/chatbot', {
+      const response = await fetch('https://zomato-flask-mongodb.onrender.com/chatbot', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

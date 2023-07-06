@@ -6,7 +6,7 @@ const OrderStatusUpdate = () => {
     const [status, setStatus] = useState('');
   
     useEffect(() => {
-      const socket = io('https://zomato-backend-api.onrender.com');
+      const socket = io('https://zomato-flask-mongodb.onrender.com');
   
       // Listen for 'status_change' event from the server
       socket.on('order_status_updated', (data) => {
@@ -31,7 +31,7 @@ const OrderStatusUpdate = () => {
   
     const handleUpdateStatus = () => {
       // Send a PATCH request to update the order status
-      fetch('https://zomato-backend-api.onrender.com/update_order', {
+      fetch('https://zomato-flask-mongodb.onrender.com/update_order', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ const OrderStatusUpdate = () => {
 //   console.log(socket,orderStatus)
 //   useEffect(() => {
 //     // Connect to the Socket.IO server
-//     const socket = io('https://zomato-backend-api.onrender.com');
+//     const socket = io('https://zomato-flask-mongodb.onrender.com');
 //     console.log(socket.connected)
 //     setSocket(socket);
 
